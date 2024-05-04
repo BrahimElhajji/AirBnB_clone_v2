@@ -6,7 +6,7 @@ using the function do_deploy
 """
 
 from fabric.api import env, put, run
-from os.path import basename, splitext
+from os.path import exists, basename, splitext
 
 env.hosts = ['100.26.246.41', '54.166.60.69']
 
@@ -15,7 +15,7 @@ def do_deploy(archive_path):
     """creates and distributes an archive to your web servers,
     using the function deploy"""
 
-    if not os.path.exists(archive_path):
+    if not exists(archive_path):
         return False
 
     try:
