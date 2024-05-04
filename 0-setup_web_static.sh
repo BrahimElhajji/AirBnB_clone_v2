@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-
 # Ensure script is executed with sudo privileges
 if [[ $EUID -ne 0 ]]; then
     echo "This script must be run as root" 
