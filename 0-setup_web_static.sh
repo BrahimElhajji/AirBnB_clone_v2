@@ -40,5 +40,7 @@ echo "server {
 # Enable the Nginx configuration by creating a symbolic link
 ln -sf /etc/nginx/sites-available/web_static /etc/nginx/sites-enabled/
 
+sudo sed -i '/listen 80 default_server/a location /hbnb_static { alias /data/web_static/current/;}' /etc/nginx/sites-enabled/default
+
 # Restart Nginx
 service nginx restart
