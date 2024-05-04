@@ -12,6 +12,7 @@ env.hosts = ['100.26.246.41', '54.166.60.69']
 env.user = 'ubuntu' 
 env.key_filename = ['my_ssh_private_key']
 
+
 def do_deploy(archive_path):
     """creates and distributes an archive to your web servers,
     using the function deploy"""
@@ -33,6 +34,5 @@ def do_deploy(archive_path):
         run('ln -s {}{}/ /data/web_static/current'.format(path, folder_name))
 
         return True
-    except Exception as e:
-        print(e)
+    except Exception:
         return False
