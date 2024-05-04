@@ -9,7 +9,7 @@ from fabric.api import env, put, run
 import os
 
 env.hosts = ['100.26.246.41', '54.166.60.69']
-env.user = 'ubuntu' 
+env.user = 'ubuntu'
 env.key_filename = ['my_ssh_private_key']
 
 
