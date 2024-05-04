@@ -8,9 +8,7 @@ using the function do_deploy
 from fabric.api import env, put, run
 import os
 
-env.hosts = ['100.26.246.41', '54.166.60.69']
-env.user = 'ubuntu'
-env.key_filename = ['my_ssh_private_key']
+env.hosts = ['100.26.246.41','54.166.60.69']
 
 
 def do_deploy(archive_path):
@@ -22,12 +20,12 @@ def do_deploy(archive_path):
 
     try:
         filename = archive_path.split("/")[-1]
-        folder_name = file_n.split(".")[0]
+        folder_name = filename.split(".")[0]
         path = "/data/web_static/releases/"
         put(archive_path, '/tmp/')
         run('mkdir -p {}{}/'.format(path, folder_name))
         run('tar -xzf /tmp/{} -C {}{}/'.format(filename, path, folder_name))
-        run('rm /tmp/{}'.format(file_n))
+        run('rm /tmp/{}'.format(filename))
         run('mv {0}{1}/web_static/* {0}{1}/'.format(path, folder_name))
         run('rm -rf {}{}/web_static'.format(path, folder_name))
         run('rm -rf /data/web_static/current')
