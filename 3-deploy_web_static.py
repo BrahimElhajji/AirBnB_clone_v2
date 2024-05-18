@@ -1,0 +1,64 @@
+#!/usr/bin/python3
+"""
+Fabric script (based on the file 2-do_deploy_web_static.py)
+that creates and distributes an archive to your web servers,
+using the function deploy
+"""
+
+from fabric.api import env, run
+from fabric.operations import local
+from fabric.context_managers import cd
+from datetime import datetime
+import os
+
+env.hosts = ['100.26.246.41', '54.166.60.69']
+
+
+def do_pack():
+    """
+    Generates a .tgz archive from the contents of the web_static folder.
+    Returns:
+        Path to the generated archive if successful, None otherwise.
+    """
+
+    now = datetime.now()
+    archive = 'web_static_' + now.strftime("%Y%m%d%H%M%S") + '.' + 'tgz'
+    local('mkdir -p versions')
+    create = local('tar -cvzf versions/{} web_static'.format(archive))
+
+    if create is not None:
+        return archive
+    else:
+        return None
+
+
+def do_deploy(archive_path):
+    """Deploys an archive to the web servers"""
+    if not os.path.exists(archive_path):
+        return False
+
+    try:
+        filename = archive_path.split("/")[-1]
+        folder_name = filename.split(".")[0]
+        path = "/data/web_static/releases/"
+        put(archive_path, '/tmp/')
+        run('mkdir -p {}{}/'.format(path, folder_name))
+        run('tar -xzf /tmp/{} -C {}{}/'.format(filename, path, folder_name))
+        run('rm /tmp/{}'.format(filename))
+        run('mv {0}{1}/web_static/* {0}{1}/'.format(path, folder_name))
+        run('rm -rf {}{}/web_static'.format(path, folder_name))
+        run('rm -rf /data/web_static/current')
+        run('ln -s {}{}/ /data/web_static/current'.format(path, folder_name))
+
+        return True
+    except Exception as e:
+        print(e)
+        return False
+
+
+def deploy():
+    """Creates and distributes an archive to your web servers"""
+    archive_path = do_pack()
+    if not archive_path:
+        return False
+    return do_deploy(archive_path)
