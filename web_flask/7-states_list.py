@@ -9,6 +9,12 @@ from flask import request, abort
 app = Flask(__name__)
 
 
+engine = create_engine('sqlite:///storage.db')
+db_session = scoped_session(sessionmaker(autocommit=False,
+                                         autoflush=False,
+                                         bind=engine))
+
+
 @app.teardown_appcontext
 def teardown_db_session(exception):
     """teardown the database session after each request"""
