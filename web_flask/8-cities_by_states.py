@@ -12,7 +12,7 @@ def cities_by_states():
     """Displays a html page with states and cities"""
     states = storage.all('State')
     sorted_states = sorted(states, key=lambda x: x.name)
-    return render_template('states.html', states=sorted_states)
+    return render_template('8-cities_by_states.html', states=sorted_states)
 
 
 @app.teardown_appcontext
