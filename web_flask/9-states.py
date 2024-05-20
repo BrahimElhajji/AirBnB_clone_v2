@@ -8,21 +8,19 @@ app = Flask(__name__)
 
 
 @app.route('/states', strict_slashes=False)
-def states():
-    """Displays a html page with states"""
-    states = storage.all('State')
-    sorted_states = sorted(states, key=lambda x: x.name)
-    return render_template('9-states.html', states=sorted_states)
+def state():
+    """fun that Displays an html page with states"""
+    states = storage.all(State)
+    return render_template('9-states.html', states=states, mode='all')
 
 
-@app.route('/states/<string:id>', strict_slashes=False)
-def state(id):
-    """Displays a html page with citys of that state"""
-    state = storage.get('State', id)
-    if state:
-        return render_template('9-states.html', state=state)
-    else:
-        return render_template('not_found.html')
+@app.route('/states/<id>', strict_slashes=False)
+def state_by_id(id):
+    """fun that Display an html page with citys of that state"""
+    for state in storage.all(State).values():
+        if state.id == id:
+            return render_template('9-states.html', states=state, mode='id')
+    return render_template('9-states.html', states=state, mode='none')
 
 
 @app.teardown_appcontext
